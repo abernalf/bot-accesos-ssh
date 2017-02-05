@@ -4,6 +4,6 @@ En primer lugar comenta rque este repositorio no ha sido creado con fines malign
 
 El codigo está bien comentado y consiste basicamente en ir probando diferentes IP hasta conseguir acceso, cualquier mejora es bienvenida.
 
-´´´she
+```she
 python script_ssh.py
-´´´
+```
