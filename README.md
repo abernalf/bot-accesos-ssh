@@ -7,3 +7,5 @@ El codigo está bien comentado y consiste basicamente en ir probando diferentes 
 ```she
 python script_ssh.py
 ```
+
+Es necesario tener instalada las librerias "paramiko" y "os"
