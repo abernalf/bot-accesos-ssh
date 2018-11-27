@@ -1,30 +1,44 @@
-
 # -*- coding: utf-8 -*- 
 import paramiko
 import os
- 
+import argparse
 
+LIMIT = 255
 
-ssh_usuario  = 'pi' #Usuario desde el cual nos conectaremos (Usuario del pc)
-ssh_clave    = 'raspberry' #Pass de ese pc
-ssh_puerto   = 22 # O el puerto SSH que use nuestro servidor
-comando      = 'ls' # el comando que vamos a ejecutar en el servidor
- 
-# Conectamos al servidor
-z = 0
-a = 116 #Ultimo numero de la IP desde el cual comenzamos 
-while z == 0:
-	ssh_servidor = "192.168.1."+str(a)
-	print (ssh_servidor)
-	try:
-		conexion = paramiko.Transport((ssh_servidor, ssh_puerto)) #HAce ssh a la ip por el puerto
-		conexion.connect(username = ssh_usuario, password = ssh_clave) #Login en esa dirección 
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser(
+		description="Python bot for accessing ssh hosts")
+	parser.add_argument("user", help="username")
+	parser.add_argument("password", help="user's password")
+	parser.add_argument("network", help="network")
+	parser.add_argument("begin_host", help="Host id in IP to start")
+	parser.add_argument("command", help="Command to run in the server after connecting")
+	args = parser.parse_args()
+	user = args.user
+	password = args.password
+	network = args.network
+	host = args.begin_host
+	command = args.command
 	
-		canal = conexion.open_session() # Abrimos una sesión en el servidor
-	 
-		conexion.close()
-		a = a + 1
-		z = 1
-	except:
-		print "Acceso invalido"
-		a = a + 1
+	port = 22
+
+	# Conectamos al servidor
+	done = False
+	while not done:
+		server = network + str(host)
+		print (server)
+		try:
+			conexion = paramiko.Transport((server, port)) #HAce ssh a la ip por el puerto
+			conexion.connect(username = user, password = password) #Login en esa dirección 
+			canal = conexion.open_session() # Abrimos una sesión en el servidor
+			conexion.close()
+			host = str(int(host) + 1)
+			z = True
+		except:
+			print "Acceso invalido"
+			if int(host) == LIMIT:
+				print("Limit")
+				done = True
+			else:
+				host = str(int(host) + 1)
+			
